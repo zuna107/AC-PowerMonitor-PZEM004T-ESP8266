@@ -43,7 +43,8 @@ ____
 
 | Relay Module | NODEMCU |
 | :---         |:---:    |
-| VCC          | 5V Input From Adapter or similar | ❌ Do not use 3V3 output from NODEMCU
+| VCC          | 5V Input From Adapter or similar | 
+|❌ Do not use 3V3 output from NODEMCU |
 | GND          | GND     |
 | IN 1         | D7      |
 | IN 2         | D8      |
