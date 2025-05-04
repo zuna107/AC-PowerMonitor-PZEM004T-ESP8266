@@ -6,8 +6,8 @@
 #include <ESP8266WebServer.h>
 
 // WiFi credentials
-const char* ssid = "ARSA WIFI";
-const char* password = "felsa.jr1205";
+const char* ssid = "YOUR_WIFI_NAME";
+const char* password = "YOUR_WIFI_PASSWORD";
 
 // Display settings
 #define DISPLAY_ADDRESS   0x3C
