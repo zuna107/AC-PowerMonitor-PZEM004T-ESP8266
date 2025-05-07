@@ -20,16 +20,12 @@ const char* password = "YOUR_WIFI_PASSWORD";
 // Relay pin
 #define RELAY_1 13  // GPIO13 (D7)
 
-// Create WebServer object on port 80
 ESP8266WebServer server(80);
 
-// Initialize display
 Adafruit_SSD1306 display(DISPLAY_WIDTH, DISPLAY_HEIGHT, &Wire, DISPLAY_RESET_PIN);
 
-// Initialize PZEM sensor
 PZEM004Tv30 pzem1(14, 12); // GPIO14(D5) to Tx PZEM004; GPIO12(D6) to Rx PZEM004
 
-// Global variables to store sensor data
 float voltage1 = 0.0;
 float current1 = 0.0;
 float power1 = 0.0;
@@ -246,7 +242,6 @@ float zeroIfNan(float v) {
   return isnan(v) ? 0 : v;
 }
 
-// Process HTML template variables
 String processor(const String& var) {
   if(var == "VOLTAGE") return isnan(voltage1) ? "Error" : String(voltage1, 2);
   else if(var == "CURRENT") return isnan(current1) ? "Error" : String(current1, 2);
@@ -261,7 +256,6 @@ String processor(const String& var) {
   return String();
 }
 
-// Set up OLED display
 void setupDisplay() {
   Wire.begin(DISPLAY_SDA_PIN, DISPLAY_SCL_PIN);
   display.begin(SSD1306_SWITCHCAPVCC, DISPLAY_ADDRESS);
@@ -277,7 +271,6 @@ void setupDisplay() {
   delay(1000);
 }
 
-// Connect to WiFi
 void setupWiFi() {
   // Connect to WiFi
   WiFi.begin(ssid, password);
@@ -344,12 +337,10 @@ void setupWebServer() {
     server.send(200, "application/json", json);
   });
 
-  // Start server
   server.begin();
   Serial.println("HTTP server started");
 }
 
-// Read values from PZEM sensor
 void readPZEMValues() {
   voltage1 = zeroIfNan(pzem1.voltage());
   current1 = zeroIfNan(pzem1.current());
@@ -366,7 +357,6 @@ void readPZEMValues() {
     VAR1 = va1 * sqrt(1 - sq(pf1));
   }
 
-  // Serial output
   Serial.println("");
   Serial.printf("Voltage        : %.2f V\n", voltage1);
   Serial.printf("Current        : %.2f A\n", current1);
@@ -379,18 +369,17 @@ void readPZEMValues() {
   Serial.printf("---------- END ----------\n");
 }
 
-// Control relay based on current reading
 void controlRelay() {
   if (current1 >= 1.0) {
-    digitalWrite(RELAY_1, LOW); // Relay 1 AKTIF
-    Serial.println("⚠️ Arus tinggi! Relay 1 AKTIF.");
+    digitalWrite(RELAY_1, LOW);
+    Serial.println("⚠️ Arus tinggi! Relay 1 ON.");
   } else {
-    digitalWrite(RELAY_1, HIGH); // Relay 1 NONAKTIF
-    Serial.println("Relay 1 mati");
+    digitalWrite(RELAY_1, HIGH);
+    Serial.println("Relay 1 OFF");
   }
 }
 
-// Update OLED display with readings
+
 void updateDisplay() {
   display.clearDisplay();
   display.setCursor(0, 0);
